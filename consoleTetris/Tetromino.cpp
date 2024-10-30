@@ -1,7 +1,7 @@
 #include "Tetromino.h"
 #include <iostream>
 #include "Game.h"
-#include <random>   
+#include <random>
 
 Tetromino::Tetromino()
     : shape_(Shape(1, std::vector<bool>(1, false))), // 1x1 크기의 빈 블록으로 초기화
