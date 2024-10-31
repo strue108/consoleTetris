@@ -153,6 +153,23 @@ void Game::testFunc()
         //printShape();    
 }
 
+
+void Game::run()
+{
+}
+
+void Game::timer()
+{
+}
+
+void Game::inputHandler()
+{
+}
+
+void Game::blockFall()
+{
+}
+
 void Game::rotate90(RotationDirection dir)
 {
     const auto& shape = currentBlock_->getShape();

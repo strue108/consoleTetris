@@ -26,6 +26,11 @@ public:
 	bool checkCollision(const Shape&, const Point&) const;
 	void testFunc();
 
+	void run();
+	void timer();
+	void inputHandler();
+	void blockFall();
+
 private:
 	Shape grid_;
 	std::unique_ptr<Tetromino> currentBlock_;

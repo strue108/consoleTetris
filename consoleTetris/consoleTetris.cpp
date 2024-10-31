@@ -8,22 +8,35 @@
 
 
 int main() {
-    Game newGame;
+    Game game;
     int cnt = 0;
 
     Tetromino block;
-    newGame.setCurrentBlock(Tetromino());
+
+    //for testing
+    game.setCurrentBlock(Tetromino());
     
     while (true) {    
         //if (newGame.isNewBlock())
         //    newGame.setCurrentBlock(Tetromino());
-        newGame.printGrid();
+        game.printGrid();
 
-        newGame.testFunc();
-        newGame.deleteLine();
+        game.testFunc();
+        game.deleteLine();
         //newGame.setNextBlock(Z);
         //newGame.printGrid();
     }
-    
+ 
+
+    std::thread timerThread(&Game::timer, &game);
+    std::thread inputThread(&Game::inputHandler, &game);
+    std::thread blcokFallThread(&Game::blockFall, &game);
+
+    game.run();
+
+    timerThread.join();
+    inputThread.join();
+    blcokFallThread.join();
+
     return 0;
 }
