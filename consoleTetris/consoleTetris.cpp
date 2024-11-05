@@ -9,6 +9,8 @@
 
 int main() {
     Game game;
+    
+    /*
     int cnt = 0;
 
     Tetromino block;
@@ -26,8 +28,11 @@ int main() {
         //newGame.setNextBlock(Z);
         //newGame.printGrid();
     }
- 
+    */
     game.start();
 
+    //std::this_thread::sleep_for(std::chrono::seconds(15));
+    
+    
     return 0;
 }

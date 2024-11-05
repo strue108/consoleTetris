@@ -5,6 +5,7 @@
 #include <thread>
 #include "Tetromino.h"
 #include <atomic>
+#include <mutex>
 
 using Shape = std::vector<std::vector<bool>>;
 enum class RotationDirection { cw, ccw };
@@ -35,13 +36,15 @@ public:
 	void input_handler();
 	void block_fall();
 
+	std::atomic_bool running;
+
 private:
 	Shape grid_;
 	std::unique_ptr<Tetromino> currentBlock_;
 
 	// 멀티스레드 환경에서 변수를 안전하게 읽어, Race condition을 방지한다.
-	std::atomic_bool running;
-	
+	std::mutex mtx;
+	std::condition_variable cv;
 	std::thread timer_thread;
 	std::thread input_thread;
 	std::thread block_fall_thread;

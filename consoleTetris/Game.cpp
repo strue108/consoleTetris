@@ -1,11 +1,15 @@
 #include "Game.h"
 #include <iostream>
 #include <algorithm>
+#include <mutex>
+#include <conio.h> 
 
 Game::Game()
     : grid_(20, std::vector<bool>(10, false)), // 20x10 크기의 그리드
-    currentBlock_() // Tetromino의 기본 생성자 호출
+    currentBlock_(),
+    running(false)  // Tetromino의 기본 생성자 호출
 {
+    
     // 추가 초기화 코드가 필요하다면 여기에 작성
 }
 
@@ -159,16 +163,26 @@ void Game::start()
     running = true;
     timer_thread = std::thread(&Game::timer, this);
     input_thread = std::thread(&Game::input_handler, this);
-    block_fall_thread = std::thread(&Game::block_fall, this);
+
+    std::this_thread::sleep_for(std::chrono::seconds(20));
+    //block_fall_thread = std::thread(&Game::block_fall, this);
+    end();
 }
 
 void Game::end()
 {
-    running = false;
-    if (block_fall_thread.joinable())
-        block_fall_thread.join();
+    {
+        std::lock_guard<std::mutex> lock(mtx);
+        running = false; // 종료 신호
+    }
+    cv.notify_all();
+    
+    //if (block_fall_thread.joinable())
+    //    block_fall_thread.join();
+
     if (input_thread.joinable())
         input_thread.join();
+    
     if (timer_thread.joinable())
         timer_thread.join();
 
@@ -177,13 +191,43 @@ void Game::end()
 
 void Game::timer()
 {
-    while (running) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    int count = 0;
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // CPU 사용 줄이기
+
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            if (!running) break; // 종료 신호가 들어오면 루프 탈출
+        }
+        count++;
+        std::cout << "Count: " << count << std::endl;
+
+        // 임계치 도달 시 end() 호출
+        if (count >= 100) {
+            std::cout << "Limit reached, signaling to end the game." << std::endl;
+            running = false; // 안전하게 종료
+            break;
+        }
     }
 }
 
 void Game::input_handler()
 {
+    while (true) {
+        {
+            std::lock_guard<std::mutex> lock(mtx);
+            if (!running) break; // 종료 신호가 들어오면 루프 탈출
+        }
+        if (_kbhit()) { // 키가 눌렸는지 확인
+            char ch = _getch(); // 키 입력 받기
+            if (ch == 'q') { // 'q'를 누르면 게임 종료
+                std::cout << "Ending game..." << std::endl;
+                running = false; // 안전하게 종료
+                break;
+            }
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(50)); // CPU 사용 줄이기
+    }
 }
 
 void Game::block_fall()
