@@ -2,7 +2,10 @@
 #define GAME_H
 
 #include <vector>
+#include <thread>
 #include "Tetromino.h"
+#include <atomic>
+
 using Shape = std::vector<std::vector<bool>>;
 enum class RotationDirection { cw, ccw };
 enum class MoveDirection { Left, Right, Down };
@@ -26,16 +29,22 @@ public:
 	bool checkCollision(const Shape&, const Point&) const;
 	void testFunc();
 
-	void run();
+	void start();
+	void end();
 	void timer();
-	void inputHandler();
-	void blockFall();
+	void input_handler();
+	void block_fall();
 
 private:
 	Shape grid_;
 	std::unique_ptr<Tetromino> currentBlock_;
 
-
+	// 멀티스레드 환경에서 변수를 안전하게 읽어, Race condition을 방지한다.
+	std::atomic_bool running;
+	
+	std::thread timer_thread;
+	std::thread input_thread;
+	std::thread block_fall_thread;
 
 	void rotate90(RotationDirection);
 	void move(MoveDirection);

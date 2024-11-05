@@ -154,19 +154,39 @@ void Game::testFunc()
 }
 
 
-void Game::run()
+void Game::start()
 {
+    running = true;
+    timer_thread = std::thread(&Game::timer, this);
+    input_thread = std::thread(&Game::input_handler, this);
+    block_fall_thread = std::thread(&Game::block_fall, this);
+}
+
+void Game::end()
+{
+    running = false;
+    if (block_fall_thread.joinable())
+        block_fall_thread.join();
+    if (input_thread.joinable())
+        input_thread.join();
+    if (timer_thread.joinable())
+        timer_thread.join();
+
+    // Game ended.
 }
 
 void Game::timer()
 {
+    while (running) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 }
 
-void Game::inputHandler()
+void Game::input_handler()
 {
 }
 
-void Game::blockFall()
+void Game::block_fall()
 {
 }
 

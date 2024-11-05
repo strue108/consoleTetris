@@ -27,16 +27,7 @@ int main() {
         //newGame.printGrid();
     }
  
-
-    std::thread timerThread(&Game::timer, &game);
-    std::thread inputThread(&Game::inputHandler, &game);
-    std::thread blcokFallThread(&Game::blockFall, &game);
-
-    game.run();
-
-    timerThread.join();
-    inputThread.join();
-    blcokFallThread.join();
+    game.start();
 
     return 0;
 }
