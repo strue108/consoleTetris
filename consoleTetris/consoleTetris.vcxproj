@@ -133,6 +133,8 @@
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="RenderHandler.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="StartScene.cpp" />
     <ClCompile Include="Tetromino.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +143,9 @@
     <ClInclude Include="Handler.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="RenderHandler.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="StartScene.h" />
     <ClInclude Include="Tetromino.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

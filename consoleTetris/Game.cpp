@@ -2,7 +2,8 @@
 #include <iostream>
 #include <algorithm>
 #include <mutex>
-#include <conio.h> 
+#include <conio.h>
+#include "StartScene.h"
 
 Game::Game()
     : grid_(20, std::vector<bool>(10, false)), // 20x10 크기의 그리드
@@ -161,8 +162,15 @@ void Game::testFunc()
 void Game::start()
 {
     running = true;
-    timer_thread = std::thread(&Game::timer, this);
-    input_thread = std::thread(&Game::input_handler, this);
+    //timer_thread = std::thread(&Game::timer, this);
+    //input_thread = std::thread(&Game::input_handler, this);
+
+    StartScene ss;
+    ss.initalize();
+    ss.render();
+
+    
+
 
     std::this_thread::sleep_for(std::chrono::seconds(20));
     //block_fall_thread = std::thread(&Game::block_fall, this);
@@ -172,7 +180,6 @@ void Game::start()
 void Game::end()
 {
     {
-        std::lock_guard<std::mutex> lock(mtx);
         running = false; // 종료 신호
     }
     cv.notify_all();
@@ -196,7 +203,6 @@ void Game::timer()
         std::this_thread::sleep_for(std::chrono::milliseconds(100)); // CPU 사용 줄이기
 
         {
-            std::lock_guard<std::mutex> lock(mtx);
             if (!running) break; // 종료 신호가 들어오면 루프 탈출
         }
         count++;
@@ -215,7 +221,6 @@ void Game::input_handler()
 {
     while (true) {
         {
-            std::lock_guard<std::mutex> lock(mtx);
             if (!running) break; // 종료 신호가 들어오면 루프 탈출
         }
         if (_kbhit()) { // 키가 눌렸는지 확인
