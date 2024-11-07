@@ -130,6 +130,7 @@
     <ClCompile Include="consoleTetris.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameInterface.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Handler.cpp" />
     <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="RenderHandler.cpp" />
@@ -140,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameInterface.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="Handler.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="RenderHandler.h" />

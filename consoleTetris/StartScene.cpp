@@ -1,28 +1,34 @@
 #include "StartScene.h"
+#include "GameScene.h"
 #include <iostream>
 #include <conio.h> 
 #include <Windows.h>
 #include <string>
 
+
 void StartScene::initalize()
 {
     initalizeConsole();
     printTetris(0);
-    menuNavigation();
-    char ch = _getch();
-
 }
 
 void StartScene::update()
 {
+    
 }
 
 void StartScene::render()
 {
+
 }
 
 void StartScene::finalize()
 {
+}
+
+int StartScene::menuSelecting()
+{
+    return menuNavigation();
 }
 
 
@@ -35,8 +41,8 @@ int StartScene::getConsoleWidth()
 
 void StartScene::initalizeConsole()
 {
-    const int width = 800;
-    const int height = 600;
+    const int width = 400;
+    const int height = 400;
 
     // 콘솔 화면 버퍼 크기 설정 (버퍼 크기 설정 안 하면 스크롤 막힘)
     SMALL_RECT rect = { 0, 0, width / 8 - 1, height / 16 - 1 };  // 텍스트 화면의 크기 (글자 크기 고려)
@@ -65,25 +71,25 @@ void StartScene::initalizeConsole()
 
 void StartScene::printTetris(int selectedOption) {
     std::string T[7] = {
-        "######   #######  ######   ######   ######    ##### ",
-        "  ##     ##         ##     ##   ##    ##     ##   ##",
-        "  ##     ##         ##     ##   ##    ##     ##     ",
-        "  ##     #####      ##     ######     ##      ##### ",
-        "  ##     ##         ##     ## ##      ##          ##",
-        "  ##     ##         ##     ##  ##     ##     ##   ##",
-        "  ##     #######    ##     ##   ##  ######    ##### "
+        "######  ####### ###### ######  ######  ##### ",
+        "  ##    ##        ##   ##   ##   ##   ##   ##",
+        "  ##    ##        ##   ##   ##   ##   ##     ",
+        "  ##    #####     ##   ######    ##    ##### ",
+        "  ##    ##        ##   ## ##     ##        ##",
+        "  ##    ##        ##   ##  ##    ##   ##   ##",
+        "  ##    #######   ##   ##   ## ######  ##### "
     };
     std::string menu[3] = {
-        "                       START",
-        "                      RANKING",
-        "                        END"
+        "                   START",
+        "                  RANKING",
+        "                    END"
     };
 
     int console_width = getConsoleWidth();
     int max_line_length = 0;
 
     
-    for (int i = 0; i < 10; ++i)
+    for (int i = 0; i < 5; ++i)
         std::cout << std::endl;
     
     // 각 줄의 길이를 계산하여 가장 긴 줄의 길이를 찾음
@@ -117,19 +123,18 @@ void StartScene::printTetris(int selectedOption) {
 
 }
 
-void StartScene::menuNavigation()
+int StartScene::menuNavigation()
 {
     int selectedOption = 0;  // 시작할 때 선택된 항목은 0 (start)
     char ch;
 
     while (true) {
         
-
         if (_kbhit()) {  // 키 입력이 있을 때
             ch = _getch();  // 입력된 키 읽기
 
             if (ch == 27) {  // ESC 키를 누르면 종료
-                break;
+                return -1;
             }
             else if (ch == 72) {  // 위 방향키 (Arrow Up)
                 selectedOption = (selectedOption - 1 + 3) % 3;  // 선택 항목을 위로 이동
@@ -140,15 +145,15 @@ void StartScene::menuNavigation()
             else if (ch == 13) {  // Enter 키를 누르면 선택
                 if (selectedOption == 0) {
                     std::cout << "Game Starting...\n";
-                    break;  // 게임 시작
+                    return 0;  // 게임 시작
                 }
                 else if (selectedOption == 1) {
                     std::cout << "Showing Ranking...\n";
-                    break;  // 랭킹 보기
+                    return 1;  // 랭킹 보기
                 }
                 else if (selectedOption == 2) {
                     std::cout << "Exiting...\n";
-                    break;  // 종료
+                    return 2;  // 종료
                 }
             }
 

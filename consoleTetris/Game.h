@@ -36,7 +36,7 @@ public:
 	void timer();
 	void input_handler();
 	void block_fall();
-
+	void test_scene();
 
 	std::atomic_bool running;
 

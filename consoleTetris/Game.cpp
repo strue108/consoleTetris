@@ -4,6 +4,7 @@
 #include <mutex>
 #include <conio.h>
 #include "StartScene.h"
+#include <Windows.h>
 
 Game::Game()
     : grid_(20, std::vector<bool>(10, false)), // 20x10 크기의 그리드
@@ -167,8 +168,12 @@ void Game::start()
 
     StartScene ss;
     ss.initalize();
-    ss.render();
-
+    int menu = ss.menuSelecting();
+    
+    if (menu == 0) {
+        
+        test_scene();
+    }
     
 
 
@@ -237,6 +242,39 @@ void Game::input_handler()
 
 void Game::block_fall()
 {
+}
+
+void Game::test_scene()
+{
+    system("cls");
+
+    std::string T[21] = {
+        "□□□□□□□□□□□□□□  NEXT",
+        "□□                    □□    □□□□□□",
+        "□□                    □□    □        □",
+        "□□                    □□    □        □",
+        "□□                    □□    □        □",
+        "□□                    □□    □        □",
+        "□□                    □□    □□□□□□",
+        "□□                    □□",
+        "□□                    □□    TIME : 00:00",
+        "□□                    □□    SCORE : 0000",
+        "□□                    □□",
+        "□□                    □□",
+        "□□                    □□",
+        "□□                    □□",
+        "□□                    □□    KEY :",
+        "□□                    □□      R : CW",
+        "□□                    □□      Q : CCW",
+        "□□                    □□",
+        "□□                    □□",
+        "□□                    □□",
+        "□□□□□□□□□□□□□□"
+    };
+
+    for (auto row : T) {
+        std::cout << row << std::endl;
+    }
 }
 
 void Game::rotate90(RotationDirection dir)
